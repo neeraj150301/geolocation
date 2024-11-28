@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../controller/user_service.dart';
+import 'map_screen.dart';
 
 class LocationPage extends StatefulWidget {
   final String receiverName;
@@ -18,8 +19,6 @@ class LocationPage extends StatefulWidget {
 
 class _LocationPageState extends State<LocationPage> {
   final UserService _userService = UserService();
-  // String? location;
-  // String? timestamp;
   List<Map<String, dynamic>> locations = [];
 
   @override
@@ -39,7 +38,7 @@ class _LocationPageState extends State<LocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverName),
+        title: Text(widget.receiverName.toUpperCase()),
         centerTitle: true,
       ),
       body: locations.isEmpty
@@ -48,14 +47,52 @@ class _LocationPageState extends State<LocationPage> {
               itemCount: locations.length,
               itemBuilder: (context, index) {
                 final location = locations[index];
-                return Card(
-                    child: ListTile(
-                  title: Text(
-                      "Location: ${location['latitude']}, ${location['longitude']}"),
-                  subtitle: Text(
-                    "Time: ${_formatTimestamp(location['timestamp'])}",
-                  ),
-                ));
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  child: Card(
+                      child: ListTile(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MapScreen(
+                            latitude: location['latitude'],
+                            longitude: location['longitude'],
+                            time: _formatTimestamp(location['timestamp']),
+                          ),
+                        ),
+                      );
+                    },
+                    title: Row(
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                            "${location['latitude']}, ${location['longitude']}"),
+                      ],
+                    ),
+                    subtitle: Row(
+                      children: [
+                        const Icon(
+                          Icons.timer_sharp,
+                          size: 20,
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          _formatTimestamp(location['timestamp']),
+                        ),
+                      ],
+                    ),
+                  )),
+                );
               },
             ),
     );

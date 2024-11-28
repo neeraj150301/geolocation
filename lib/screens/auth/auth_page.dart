@@ -23,6 +23,8 @@ class _AuthPageState extends State<AuthPage>
   final TextEditingController _loginPasswordController =
       TextEditingController();
   final TextEditingController _signupEmailController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
   final TextEditingController _signupPasswordController =
       TextEditingController();
   final TextEditingController _signupConfirmPasswordController =
@@ -151,7 +153,7 @@ class _AuthPageState extends State<AuthPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "New to CHATTY?  ",
+                  "New to VNR?  ",
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground),
                 ),
@@ -183,23 +185,29 @@ class _AuthPageState extends State<AuthPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MyTextField(
+                hintText: "Enter Name",
+                obscureText: false,
+                controller: _nameController,
+              ),
+              const SizedBox(height: 5),
+              MyTextField(
                 hintText: "Enter Email",
                 obscureText: false,
                 controller: _signupEmailController,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               MyTextField(
                 hintText: "Enter Password",
                 obscureText: true,
                 controller: _signupPasswordController,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 5),
               MyTextField(
                 hintText: "Confirm Password",
                 obscureText: true,
                 controller: _signupConfirmPasswordController,
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 7),
               ElevatedButton(
                 child: Text(
                   'Sign Up',
@@ -216,7 +224,7 @@ class _AuthPageState extends State<AuthPage>
                   }
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 7),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -263,14 +271,15 @@ class _AuthPageState extends State<AuthPage>
         _signupConfirmPasswordController.text) {
       try {
         await authService.signUpWithEmailAndPassword(
+          _nameController.text,
           _signupEmailController.text,
           _signupPasswordController.text,
           context,
         );
       } catch (e) {
         // showDialog(
-            // context: context,
-            // builder: (context) => AlertDialog(title: Text(e.toString())));
+        // context: context,
+        // builder: (context) => AlertDialog(title: Text(e.toString())));
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import '../config/svgs.dart';
 import '../controller/auth_service.dart';
+import '../screens/profile/profile_page.dart';
 
 class MyDrawer extends StatelessWidget {
   MyDrawer({super.key});
@@ -56,7 +57,7 @@ class MyDrawer extends StatelessWidget {
                   leading: const Icon(Icons.person),
                   onTap: () {
                     Navigator.pop(context);
-                    // Get.to(() =>  const ProfilePage());
+                    Get.to(() =>  const ProfilePage());
                   },
                 ),
               ),

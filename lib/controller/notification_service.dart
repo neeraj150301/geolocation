@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'access_token_firebase.dart';
 
 void startLocationChecker(String userId) {
-  print("startLocationChecker");
+  // print("startLocationChecker");
   Timer.periodic(const Duration(minutes: 2), (timer) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -29,8 +29,8 @@ void startLocationChecker(String userId) {
       lastLocation['latitude'],
       lastLocation['longitude'],
     );
-    print("distance = $distance");
-    if (distance > 0) {
+    // print("distance = $distance");
+    if (distance > 20) {
       // Notify other users
       QuerySnapshot usersSnapshot = await firestore.collection('Users').get();
       for (var user in usersSnapshot.docs) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../../config/svgs.dart';
 import '../../controller/auth_service.dart';
 import '../../controller/location_service.dart';
 import '../../controller/notification_service.dart';
@@ -46,16 +48,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "V N R",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            // color: Color.fromARGB(255, 150, 244, 116)
+          centerTitle: true,
+          title: SvgPicture.asset(
+            AssetsSvgs.appIcon,
+            height: 65,
+          )
+
+          // const Text(
+          //   "V N R",
+          //   style: TextStyle(
+          //     fontWeight: FontWeight.bold,
+          //     fontSize: 24,
+          //     // color: Color.fromARGB(255, 150, 244, 116)
+          //   ),
+          // ),
           ),
-        ),
-      ),
       drawer: MyDrawer(),
       body: _buildUserList(),
     );
@@ -90,14 +97,14 @@ class _HomePageState extends State<HomePage> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16),
         child: UserTile(
-          user: userData['email'],
+          user: userData['name'].toString().toUpperCase(),
           onTap: () {
             // tap on user to go to user page
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => LocationPage(
-                  receiverName: userData['email'],
+                  receiverName: userData['name'],
                   receiverId: userData['uid'],
                 ),
               ),

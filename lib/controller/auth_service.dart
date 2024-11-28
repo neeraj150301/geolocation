@@ -84,7 +84,7 @@ class AuthService {
             ],
           ),
           actions: [
-            TextButton(
+            OutlinedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -108,7 +108,7 @@ class AuthService {
 
   // Sign Up
   Future signUpWithEmailAndPassword(
-      String email, String password, BuildContext context) async {
+      String name, String email, String password, BuildContext context) async {
     try {
       // create user
       UserCredential result = await _firebaseAuth
@@ -121,7 +121,7 @@ class AuthService {
         {
           'uid': result.user!.uid,
           'email': email,
-          // 'name': '',
+          'name': name,
           'fcmToken': fcmToken,
         },
       );

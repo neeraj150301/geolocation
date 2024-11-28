@@ -49,6 +49,12 @@ class _MyTextFieldState extends State<MyTextField> {
             }
           }
 
+          if (widget.hintText.contains("Enter Name")) {
+            if (value == null || value.isEmpty) {
+              return 'Name cannot be empty';
+            }
+          }
+
           if (widget.hintText != "Type message here...") {
             if (value == null || value.isEmpty) {
               return 'This field cannot be empty';
@@ -61,7 +67,9 @@ class _MyTextFieldState extends State<MyTextField> {
               ? const Icon(Icons.email)
               : (widget.hintText.contains("Password"))
                   ? const Icon(Icons.password)
-                  : null,
+                  : (widget.hintText.contains("Enter Name"))
+                      ? const Icon(Icons.person)
+                      : null,
           prefixIconColor: Theme.of(context).colorScheme.primary,
           labelText: widget.hintText,
           labelStyle: TextStyle(
