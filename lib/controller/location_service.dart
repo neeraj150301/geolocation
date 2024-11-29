@@ -5,11 +5,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 
-
-
- 
 void startLocationTracking(String userId) {
-  Timer.periodic(const Duration(minutes: 2), (timer) async {
+  Timer.periodic(const Duration(minutes: 5), (timer) async {
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
@@ -24,6 +21,65 @@ void startLocationTracking(String userId) {
           }
         ]),
       });
+      print("Location updated: ${position.latitude}, ${position.longitude}");
+    } catch (e) {
+      print("Error fetching location: $e");
+    }
+  });
+}
+
+void liveLocationSaver(String userId) {
+  Timer.periodic(const Duration(minutes: 1), (timer) async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference userDoc = firestore.collection('Users').doc(userId);
+      DocumentSnapshot docSnapshot = await userDoc.get();
+
+      if (docSnapshot.exists) {
+        // Update the document
+        Map<String, dynamic>? data =
+            docSnapshot.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('livelocation')) {
+          // Update the existing 'livelocation' field
+          await userDoc.update({
+            "livelocation": {
+              "latitude": position.latitude,
+              "longitude": position.longitude,
+              "timestamp": DateTime.now().toIso8601String(),
+            }
+          });
+        } else {
+          // Create the 'livelocation' field if it doesn't exist
+          await userDoc.set({
+            "livelocation": {
+              "latitude": position.latitude,
+              "longitude": position.longitude,
+              "timestamp": DateTime.now().toIso8601String(),
+            }
+          }, SetOptions(merge: true));
+        }
+      } else {
+        // If the document does not exist, create it with 'livelocation'
+        await userDoc.set({
+          "livelocation": {
+            "latitude": position.latitude,
+            "longitude": position.longitude,
+            "timestamp": DateTime.now().toIso8601String(),
+          }
+        });
+      }
+      // await firestore.collection('Users').doc(userId).update({
+      //   "locations": FieldValue.arrayUnion([
+      //     {
+      //       "latitude": position.latitude,
+      //       "longitude": position.longitude,
+      //       "timestamp": DateTime.now().toIso8601String(),
+      //     }
+      //   ]),
+      // });
       print("Location updated: ${position.latitude}, ${position.longitude}");
     } catch (e) {
       print("Error fetching location: $e");

@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
     requestLocationPermission();
     startLocationTracking(_authService.currentUser()!.uid);
     startLocationChecker(_authService.currentUser()!.uid);
+    liveLocationSaver(_authService.currentUser()!.uid);
   }
 
   Future<bool> requestLocationPermission() async {

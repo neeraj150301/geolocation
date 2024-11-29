@@ -8,7 +8,7 @@ import 'access_token_firebase.dart';
 
 void startLocationChecker(String userId) {
   // print("startLocationChecker");
-  Timer.periodic(const Duration(minutes: 2), (timer) async {
+  Timer.periodic(const Duration(minutes: 5), (timer) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // Fetch the user's last location
@@ -40,7 +40,7 @@ void startLocationChecker(String userId) {
             sendNotification(
               token,
               'User Moved!',
-              'User ${userDoc['email']} moved to ${lastLocation['latitude']}, ${lastLocation['longitude']}',
+              '${userDoc['name']} moved $distance meters',
             );
           }
         }

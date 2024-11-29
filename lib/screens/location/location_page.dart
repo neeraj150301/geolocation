@@ -34,6 +34,42 @@ class _LocationPageState extends State<LocationPage> {
     });
   }
 
+  void fetchLiveLocation() async {
+    try {
+      // Fetch live location from the database
+      final liveLocation =
+          await _userService.getLiveLocation(widget.receiverId);
+
+      if (liveLocation != null) {
+        // Navigate to MapScreen with live location
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MapScreen(
+                latitude: liveLocation['latitude'],
+                longitude: liveLocation['longitude'],
+                time: "Live: ${_formatTimestamp(liveLocation['timestamp'])}"),
+          ),
+        );
+      } else {
+        // Show a snackbar if no live location is found
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No live location found for this user.'),
+          ),
+        );
+      }
+    } catch (e) {
+      // Handle errors
+      print("Error fetching live location: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error fetching live location.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +117,7 @@ class _LocationPageState extends State<LocationPage> {
                       children: [
                         const Icon(
                           Icons.timer_sharp,
-                          size: 20,
+                          size: 19,
                         ),
                         const SizedBox(
                           width: 5,
@@ -95,6 +131,10 @@ class _LocationPageState extends State<LocationPage> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: fetchLiveLocation,
+        child: const Icon(Icons.my_location),
+      ),
     );
   }
 }

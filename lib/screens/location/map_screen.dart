@@ -21,11 +21,11 @@ class MapScreen extends StatelessWidget {
           children: [
             const Text(
               'Location Map',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 18),
             ),
             Text(
               time,
-              style: const TextStyle(fontSize: 13),
+              style: const TextStyle(fontSize: 15),
             ),
           ],
         ),
@@ -33,13 +33,16 @@ class MapScreen extends StatelessWidget {
       ),
       body: FlutterMap(
         options: MapOptions(
-          center: LatLng(latitude, longitude),
-          zoom: 14.0,
-        ),
+            center: LatLng(latitude, longitude),
+            zoom: 14.0,
+            maxZoom: 19,
+            minZoom: 3),
         children: [
           TileLayer(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             subdomains: ['a', 'b', 'c'],
+            maxZoom: 19,
+            minZoom: 3,
           ),
           MarkerLayer(
             markers: [

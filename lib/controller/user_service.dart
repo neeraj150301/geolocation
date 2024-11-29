@@ -17,6 +17,21 @@ class UserService {
     );
   }
 
+
+ Future<Map<String, dynamic>?> getLiveLocation(String userId) async {
+    try {
+      final doc = await _firestore.collection('Users').doc(userId).get();
+
+      if (doc.exists) {
+        final data = doc.data();
+        return data?['livelocation']; // Assuming 'livelocation' contains latitude, longitude, and timestamp
+      }
+    } catch (e) {
+      print("Error fetching live location: $e");
+    }
+    return null;
+  }
+  
 //  Future<void> addUserLocation(String userId) async {
 //     try {
 //       Position position = await Geolocator.getCurrentPosition(
